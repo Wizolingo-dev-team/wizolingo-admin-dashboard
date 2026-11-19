@@ -1,0 +1,101 @@
+/* src/styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--font-sans: "Montserrat", system-ui, -apple-system, sans-serif;
+		--font-display: "Syne", sans-serif;
+		--radius: 0.5rem;
+
+		/* Wiz Ofuasia Brand Colors (dark stage aesthetic + #D70E1D red accent — matches wizoling-website) */
+		--background: 0 0% 11%; /* #1C1C1C / #222222 stage dark */
+		--foreground: 0 0% 100%; /* #FFFFFF */
+
+		--card: 330 2% 16%; /* #2A2829 / #333132 charcoal card */
+		--card-foreground: 0 0% 100%; /* #FFFFFF */
+
+		--popover: 330 2% 16%;
+		--popover-foreground: 0 0% 100%;
+
+		/* Brand Primary: Wiz Brand Red #D70E1D */
+		--primary: 356 88% 45%;
+		--primary-foreground: 0 0% 100%;
+
+		/* Brand Secondary: Wiz Charcoal #333132 */
+		--secondary: 330 2% 22%;
+		--secondary-foreground: 0 0% 100%;
+
+		/* Muted surfaces & text */
+		--muted: 0 0% 18%;
+		--muted-foreground: 0 0% 68%;
+
+		/* Accent */
+		--accent: 356 88% 45%;
+		--accent-foreground: 0 0% 100%;
+
+		/* Destructive */
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 0 0% 98%;
+
+		/* Borders & Inputs */
+		--border: 0 0% 23%;
+		--input: 0 0% 23%;
+		--ring: 356 88% 45%;
+
+		/* Brand Tokens */
+		--brand: 356 88% 45%;
+		--brand-foreground: 0 0% 100%;
+		--brand-accent: 330 2% 20%;
+
+		--wiz-red: #d70e1d;
+		--wiz-dark: #222222;
+		--wiz-charcoal: #333132;
+		--wiz-white: #ffffff;
+	}
+
+	* {
+		@apply border-border;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		@apply bg-background text-foreground font-sans antialiased;
+		font-feature-settings: "rlig" 1, "calt" 1;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-display);
+		font-weight: 800;
+	}
+}
+
+@keyframes dash-scroll {
+	from {
+		stroke-dashoffset: 0;
+	}
+	to {
+		stroke-dashoffset: -200;
+	}
+}
+
+.animate-moving-gold {
+	stroke-dasharray: 10, 10;
+	animation: dash-scroll 20s linear infinite;
+}
+
+@keyframes shimmer {
+	100% {
+		transform: translateX(100%);
+	}
+}
+

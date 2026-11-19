@@ -1,0 +1,8 @@
+/* Wiz Ofuasia (Wizboyy) Typography Stack: Syne (Display) & Montserrat (Body) — matches wizoling-website */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap");
+
+:root {
+	--font-sans: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	--font-display: "Syne", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
