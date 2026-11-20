@@ -458,7 +458,19 @@ export const eventColumnsSchema = (
 				<div className="font-bold text-foreground">
 					{row.dateLabel || new Date(row.startDate).toLocaleDateString()}
 				</div>
-				{row.time && <div className="text-muted-foreground">{row.time}</div>}
+				{row.showTimes && row.showTimes.length > 0 ? (
+					<div className="text-muted-foreground space-y-0.5 mt-0.5">
+						{row.showTimes.map((st: any, idx: number) => (
+							<div key={st._id || idx}>
+								{st.label ? `${st.label}: ` : ""}
+								{st.time}
+								{st.timezone ? ` ${st.timezone}` : ""}
+							</div>
+						))}
+					</div>
+				) : (
+					row.time && <div className="text-muted-foreground">{row.time}</div>
+				)}
 			</div>
 		),
 	},

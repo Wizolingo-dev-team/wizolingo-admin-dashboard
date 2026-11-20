@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "author": "Wizolingo Dev Team",
+  "author": "Sync_ATH_Solutions",
   "scripts": {
     "build": "next build",
     "dev": "next dev -p 3001",

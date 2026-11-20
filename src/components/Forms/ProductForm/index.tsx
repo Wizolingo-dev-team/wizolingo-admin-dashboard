@@ -15,6 +15,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import { Badge } from "@/components/ui/badge";
@@ -148,6 +149,7 @@ export default function ProductForm({ formId, initialData, onSubmit }: ProductFo
 	const selectedCatId = watch("categories");
 	const isFeatured = watch("isFeatured");
 	const isActive = watch("isActive");
+	const releaseDateValue = watch("releaseDate");
 
 	const subCategories =
 		categories.find((c) => c._id === selectedCatId)?.subcategories || [];
@@ -516,10 +518,10 @@ export default function ProductForm({ formId, initialData, onSubmit }: ProductFo
 
 						<div className="space-y-2">
 							<Label className="text-sm font-bold">Release Date</Label>
-							<Input
-								type="date"
-								{...register("releaseDate")}
-								className="h-11 rounded-xl border-border bg-background/60"
+							<DatePicker
+								value={releaseDateValue || ""}
+								onChange={(val) => setValue("releaseDate", val)}
+								placeholder="Select release date"
 							/>
 						</div>
 

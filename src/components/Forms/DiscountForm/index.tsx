@@ -10,6 +10,7 @@ import { Icon } from "@iconify/react";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { DatePicker } from "@/components/ui/date-picker";
 import { useGetAllProducts } from "@/hooks/productManagement";
 import { Discount, CreateDiscountPayload } from "@/types/discountManagement";
 import { cn } from "@/lib/utils";
@@ -46,6 +47,7 @@ export default function DiscountForm({ formId, initialData, onSubmit }: Discount
 	});
 
 	const selectedProducts = watch("products") || [];
+	const expiryDateValue = watch("expiryDate");
 
 	const toggleProduct = (id: string) => {
 		const isSelected = selectedProducts.includes(id);
@@ -99,10 +101,13 @@ export default function DiscountForm({ formId, initialData, onSubmit }: Discount
 
 			<div className="space-y-2">
 				<Label className="text-sm font-bold">Expiry Date</Label>
-				<Input
-					type="date"
-					{...register("expiryDate")}
-					className="h-12 bg-background/60 border-border"
+				<DatePicker
+					value={expiryDateValue || ""}
+					onChange={(val) =>
+						setValue("expiryDate", val, { shouldValidate: true })
+					}
+					placeholder="Select coupon expiry date"
+					disablePastDates
 				/>
 				{errors.expiryDate && (
 					<p className="text-xs text-destructive font-medium mt-1">

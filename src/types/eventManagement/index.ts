@@ -9,11 +9,20 @@ export type EventStatus =
 	| "CANCELLED"
 	| "DRAFT";
 
+export type ShowTimeItem = {
+	_id?: string;
+	time: string;
+	timezone: string;
+	label?: string;
+};
+
 export type EventArtist = {
 	_id?: string;
 	name: string;
 	stage: string;
 	performanceTime: string;
+	timezone?: string;
+	showTimes?: ShowTimeItem[];
 	imageUrl: string;
 };
 
@@ -36,6 +45,8 @@ export type EventItem = MongoEntity & {
 	endDate?: string;
 	dateLabel: string;
 	time: string;
+	timezone?: string;
+	showTimes?: ShowTimeItem[];
 	venue: string;
 	location: string;
 	mapEmbedUrl: string;

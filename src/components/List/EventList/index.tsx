@@ -295,6 +295,27 @@ export default function EventList() {
 							<p className="text-xs font-bold text-primary uppercase">
 								{selectedEvent.venue} • {selectedEvent.location}
 							</p>
+							{(selectedEvent.showTimes?.length || selectedEvent.time) && (
+								<div className="flex flex-wrap gap-1.5 pt-1">
+									{selectedEvent.showTimes && selectedEvent.showTimes.length > 0 ? (
+										selectedEvent.showTimes.map((st, idx) => (
+											<Badge
+												key={idx}
+												variant="outline"
+												className="text-[11px] font-semibold"
+											>
+												{st.label ? `${st.label}: ` : ""}
+												{st.time}
+												{st.timezone ? ` ${st.timezone}` : ""}
+											</Badge>
+										))
+									) : (
+										<Badge variant="outline" className="text-[11px] font-semibold">
+											{selectedEvent.time}
+										</Badge>
+									)}
+								</div>
+							)}
 							<p className="text-sm text-muted-foreground">
 								{selectedEvent.description}
 							</p>
@@ -333,12 +354,25 @@ export default function EventList() {
 								</p>
 								<div className="flex flex-wrap gap-2">
 									{selectedEvent.artists.map((a, i) => (
-										<Badge key={i} variant="secondary" className="py-1.5 px-3">
-											<Icon
-												icon="ph:microphone-stage-bold"
-												className="mr-1.5 text-primary"
-											/>
-											{a.name} ({a.stage} {a.performanceTime && `• ${a.performanceTime}`})
+										<Badge
+											key={i}
+											variant="secondary"
+											className="py-1.5 px-3 flex items-center gap-2"
+										>
+											{a.imageUrl ? (
+												<img
+													src={a.imageUrl}
+													alt={a.name}
+													className="size-5 rounded-full object-cover"
+												/>
+											) : (
+												<Icon
+													icon="ph:microphone-stage-bold"
+													className="text-primary"
+												/>
+											)}
+											{a.name} ({a.stage}{" "}
+											{a.performanceTime && `• ${a.performanceTime}`})
 										</Badge>
 									))}
 								</div>

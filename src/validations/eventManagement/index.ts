@@ -39,6 +39,7 @@ export const createEventSchema = yup.object({
 	endDate: yup.string().optional(),
 	dateLabel: yup.string().optional(),
 	time: yup.string().optional(),
+	timezone: yup.string().optional(),
 	venue: yup.string().trim().required("Venue name is required"),
 	location: yup.string().trim().required("City / Country location is required"),
 	mapEmbedUrl: yup.string().optional(),

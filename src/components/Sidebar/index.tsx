@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
 import { Icon } from "@iconify/react";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/context/sidebar-context";
@@ -99,17 +98,12 @@ export default function Sidebar({ className }: { className?: string }) {
 					isCollapsed ? "px-2" : "px-5",
 				)}
 			>
-				<Link href="/dashboard" className="flex items-center gap-3">
-					<div className="relative h-10 w-10 shrink-0">
-						<Image
-							src="/assets/images/wiz-logo-white.png"
-							alt="Wiz Ofuasia Logo"
-							fill
-							className="object-contain"
-							priority
-						/>
-					</div>
-					{!isCollapsed && (
+				<Link href="/dashboard" className="flex items-center justify-center">
+					{isCollapsed ? (
+						<span className="font-display text-base font-extrabold tracking-tight text-white leading-none">
+							WIZ
+						</span>
+					) : (
 						<div className="flex flex-col">
 							<span className="font-display text-base font-extrabold tracking-tight text-white leading-none">
 								WIZ OFUASIA
