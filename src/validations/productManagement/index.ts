@@ -3,6 +3,7 @@ import * as yup from "yup";
 export const createProductSchema = yup.object({
 	productName: yup
 		.string()
+		.trim()
 		.required("Product or release title is required")
 		.min(2, "Title must be at least 2 characters"),
 	productType: yup
@@ -12,7 +13,8 @@ export const createProductSchema = yup.object({
 	description: yup
 		.string()
 		.required("Description is required")
-		.min(10, "Description must be at least 10 characters"),
+		.min(10, "Description must be at least 10 characters")
+		.max(5000, "Description cannot exceed 5000 characters"),
 	price: yup
 		.number()
 		.typeError("Price must be a number")
@@ -27,7 +29,11 @@ export const createProductSchema = yup.object({
 		.optional(),
 	colors: yup.string().optional(),
 	sizes: yup.string().optional(),
-	digitalReleaseType: yup.string().optional(),
+	shipping: yup.boolean().optional(),
+	digitalReleaseType: yup
+		.string()
+		.oneOf(["single", "album", "ep", "instrumental", "stem_pack", ""])
+		.optional(),
 	artist: yup.string().optional(),
 	releaseDate: yup.string().optional(),
 	duration: yup.string().optional(),
@@ -36,3 +42,4 @@ export const createProductSchema = yup.object({
 	isActive: yup.boolean().optional(),
 });
 
+export const updateProductSchema = createProductSchema;
