@@ -51,12 +51,16 @@ export default function EventList() {
 	const [ticketSearch, setTicketSearch] = useState("");
 	const [ticketStatusFilter, setTicketStatusFilter] = useState("all");
 
-	const ticketOrders = ticketData?.orders || [];
-	const ticketSummary = ticketData?.summary || {
-		totalOrders: 0,
-		totalTicketsSold: 0,
-		totalRevenue: 0,
-	};
+	const ticketOrders = useMemo(() => ticketData?.orders || [], [ticketData?.orders]);
+	const ticketSummary = useMemo(
+		() =>
+			ticketData?.summary || {
+				totalOrders: 0,
+				totalTicketsSold: 0,
+				totalRevenue: 0,
+			},
+		[ticketData?.summary],
+	);
 
 	const filteredEvents = useMemo(() => {
 		return events.filter((ev) => {

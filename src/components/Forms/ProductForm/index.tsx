@@ -20,7 +20,12 @@ import { Icon } from "@iconify/react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useGetAllCategories } from "@/hooks/categoryManagement";
-import { Product, ProductType, TracklistItem } from "@/types/productManagement";
+import {
+	DigitalReleaseType,
+	Product,
+	ProductType,
+	TracklistItem,
+} from "@/types/productManagement";
 
 interface TagInputProps {
 	tags: string[];
@@ -483,7 +488,9 @@ export default function ProductForm({ formId, initialData, onSubmit }: ProductFo
 							<Label className="text-sm font-bold">Release Format</Label>
 							<Select
 								defaultValue={initialData?.digitalReleaseType || "single"}
-								onValueChange={(val) => setValue("digitalReleaseType", val)}
+								onValueChange={(val) =>
+									setValue("digitalReleaseType", val as DigitalReleaseType)
+								}
 							>
 								<SelectTrigger className="h-11 rounded-xl bg-background/60 border-border">
 									<SelectValue />

@@ -29,12 +29,16 @@ export default function DashboardClient() {
 	const { data: ticketData } = useGetTicketOrdersAdmin();
 	const { data: subscribers = [] } = useGetSubscribers();
 
-	const reviews = reviewData?.reviews || [];
-	const ticketSummary = ticketData?.summary || {
-		totalOrders: 0,
-		totalTicketsSold: 0,
-		totalRevenue: 0,
-	};
+	const reviews = useMemo(() => reviewData?.reviews || [], [reviewData?.reviews]);
+	const ticketSummary = useMemo(
+		() =>
+			ticketData?.summary || {
+				totalOrders: 0,
+				totalTicketsSold: 0,
+				totalRevenue: 0,
+			},
+		[ticketData?.summary],
+	);
 
 	const stats = useMemo(() => {
 		const storeRevenue = orders

@@ -111,9 +111,9 @@
     "typescript": "^5.4.2"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --max-warnings 0 ."
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "bash -c 'tsc --noEmit'"
     ]
   },
   "packageManager": "npm@10.2.5"

@@ -1,9 +1,3 @@
-/* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable no-shadow */
-
 import redirects from "./public/redirects.js";
 
 /** @type {import("next").NextConfig} */
@@ -11,7 +5,7 @@ const config = {
 	reactStrictMode: true,
 
 	eslint: {
-		ignoreDuringBuilds: true,
+		ignoreDuringBuilds: false,
 	},
 
 	typescript: {

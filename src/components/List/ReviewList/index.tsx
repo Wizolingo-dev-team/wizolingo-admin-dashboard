@@ -10,7 +10,7 @@ import { Icon } from "@iconify/react";
 
 export default function ReviewList() {
 	const { data, isLoading } = useGetAllAdminReviews();
-	const reviews = data?.reviews || [];
+	const reviews = useMemo(() => data?.reviews || [], [data?.reviews]);
 
 	const [search, setSearch] = useState("");
 	const [ratingFilter, setRatingFilter] = useState("all");
