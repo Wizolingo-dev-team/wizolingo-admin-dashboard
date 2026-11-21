@@ -1,12 +1,10 @@
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
-import { render } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { fireEvent, render } from "@testing-library/react";
 import EventForm from "./index";
 
 describe("EventForm Integration", () => {
-	it("supports adding multiple Show Times & Time Zones and multiple Artist Set Times", async () => {
-		const user = userEvent.setup();
+	it("supports adding multiple Show Times & Time Zones and multiple Artist Set Times", () => {
 		const handleSubmit = vi.fn();
 
 		const { getByText, getByRole } = render(
@@ -14,11 +12,11 @@ describe("EventForm Integration", () => {
 		);
 
 		expect(getByText(/Show Times & Time Zones \(1\)/i)).toBeInTheDocument();
-		await user.click(getByRole("button", { name: /add show time/i }));
+		fireEvent.click(getByRole("button", { name: /add show time/i }));
 		expect(getByText(/Show Times & Time Zones \(2\)/i)).toBeInTheDocument();
 
 		expect(getByText(/Set Times & Time Zones \(1\)/i)).toBeInTheDocument();
-		await user.click(getByRole("button", { name: /add time/i }));
+		fireEvent.click(getByRole("button", { name: /add time/i }));
 		expect(getByText(/Set Times & Time Zones \(2\)/i)).toBeInTheDocument();
 	});
 });

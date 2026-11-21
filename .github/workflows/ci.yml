@@ -78,7 +78,7 @@ jobs:
         if: ${{ github.event.inputs.target_env == '' || github.event.inputs.target_env == 'local' }}
         run: npm run build
         env:
-          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+          NEXT_PUBLIC_ADMIN_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_ADMIN_API_BASE_URL || secrets.NEXT_PUBLIC_API_BASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           SKIP_ENV_VALIDATION: "true"
 
@@ -97,6 +97,7 @@ jobs:
         run: npm run test:e2e
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.target.outputs.url }}
+          NEXT_PUBLIC_ADMIN_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_ADMIN_API_BASE_URL || secrets.NEXT_PUBLIC_API_BASE_URL }}
           E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
           E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
 
@@ -104,6 +105,7 @@ jobs:
         run: npm run test:perf
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.target.outputs.url }}
+          NEXT_PUBLIC_ADMIN_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_ADMIN_API_BASE_URL || secrets.NEXT_PUBLIC_API_BASE_URL }}
           E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
           E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
 

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/lib/requests/authManagement";
 import { useRouter } from "next/navigation";
-import { setAuthToken, clearAuth } from "@/utils/auth";
+import { setAuthToken, clearAuth, getAuthToken } from "@/utils/auth";
 import { useToast } from "@/hooks/useToast";
 import type {
 	AdminLoginPayload,
@@ -75,6 +75,8 @@ export const useGetLoggedInAdmin = () => {
 	return useQuery({
 		queryKey: ["loggedInAdmin"],
 		queryFn: async () => {
+			const token = await getAuthToken();
+			if (!token) return null;
 			const response = await authService.getLoggedInAdmin();
 			return response.data;
 		},

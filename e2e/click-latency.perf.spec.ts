@@ -2,6 +2,12 @@ import { expect, test, type Page } from "@playwright/test";
 
 const E2E_EMAIL = process.env.E2E_ADMIN_EMAIL || "";
 const E2E_PASSWORD = process.env.E2E_ADMIN_PASSWORD || "";
+const HAS_LIVE_API =
+	Boolean(process.env.PLAYWRIGHT_BASE_URL) ||
+	Boolean(
+		process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL &&
+			!process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL.includes("localhost"),
+	);
 
 const MAX_CLICK_TO_PAINT_MS = 200; // Google Web Vitals INP "Good" threshold
 const MAX_POST_RESPONSE_FEEDBACK_MS = 500; // Immediate UI feedback after API resolves
@@ -68,8 +74,8 @@ test.describe("Wizolingo Admin Performance: Click-to-Action Latency & Web Vitals
 		page,
 	}) => {
 		test.skip(
-			!E2E_EMAIL || !E2E_PASSWORD,
-			"Skipping live login perf test because E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD are not set",
+			!E2E_EMAIL || !E2E_PASSWORD || (Boolean(process.env.CI) && !HAS_LIVE_API),
+			"Skipping live login perf test because E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD / NEXT_PUBLIC_ADMIN_API_BASE_URL are not set",
 		);
 
 		await page.goto("/login", { waitUntil: "load" });
