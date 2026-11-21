@@ -6,6 +6,6 @@ export const ProductsWidget = ({ value }: { value: number }) => (
 		value={value.toLocaleString()}
 		icon="ph:disc-bold"
 		trend="Active"
+		description="Total published digital tracks, albums, and physical merchandise items currently listed in the store."
 	/>
 );
-

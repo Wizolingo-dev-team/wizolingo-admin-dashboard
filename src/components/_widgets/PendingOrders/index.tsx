@@ -6,6 +6,6 @@ export const PendingOrdersWidget = ({ value }: { value: number }) => (
 		value={value.toLocaleString()}
 		icon="ph:clock-countdown-bold"
 		trend="Queue"
+		description="Orders currently in 'Processing' or 'Payment Confirmed' status awaiting fulfillment or digital delivery."
 	/>
 );
-

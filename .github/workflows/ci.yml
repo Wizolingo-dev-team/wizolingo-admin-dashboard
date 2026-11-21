@@ -1,0 +1,117 @@
+name: CI / QA Pipeline
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - development
+  workflow_dispatch:
+    inputs:
+      target_env:
+        description: "Target environment for E2E & Performance tests"
+        required: true
+        default: "local"
+        type: choice
+        options:
+          - local
+          - staging
+          - production
+
+jobs:
+  lint-typecheck-unit-integration:
+    name: Lint, Typecheck, Unit & Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci || npm install --no-audit --no-fund
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run TypeScript typecheck
+        run: npm run typecheck
+
+      - name: Run Unit Tests
+        run: npm run test:unit
+
+      - name: Run Integration Tests
+        run: npm run test:integration
+
+      - name: Build Next.js Production Bundle
+        run: npm run build
+        env:
+          SKIP_ENV_VALIDATION: "true"
+
+  e2e-and-performance:
+    name: E2E & Click-Latency Performance Tests
+    needs: lint-typecheck-unit-integration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci || npm install --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build Next.js App for Local E2E & Perf
+        if: ${{ github.event.inputs.target_env == '' || github.event.inputs.target_env == 'local' }}
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          SKIP_ENV_VALIDATION: "true"
+
+      - name: Resolve Playwright Base URL
+        id: target
+        run: |
+          if [ "${{ github.event.inputs.target_env }}" = "production" ]; then
+            echo "url=https://www.admin.wizofuasia.com" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.inputs.target_env }}" = "staging" ]; then
+            echo "url=https://wizolingo-admin-dashboard.vercel.app" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run E2E Tests
+        run: npm run test:e2e
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.target.outputs.url }}
+          E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+
+      - name: Run Performance & Click-Latency Tests
+        run: npm run test:perf
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.target.outputs.url }}
+          E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
