@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
+import { cn } from "@/lib/utils";
 
 interface ViewDetailsModalProps {
 	open: boolean;
@@ -18,6 +19,7 @@ interface ViewDetailsModalProps {
 	description?: string;
 	children: React.ReactNode;
 	onEditClick?: () => void;
+	maxWidthClass?: string;
 }
 
 export default function ViewDetailsModal({
@@ -27,12 +29,16 @@ export default function ViewDetailsModal({
 	description,
 	children,
 	onEditClick,
+	maxWidthClass = "sm:max-w-xl",
 }: ViewDetailsModalProps) {
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent
 				side="right"
-				className="flex h-full w-full flex-col border-l border-border bg-background p-0 sm:max-w-xl"
+				className={cn(
+					"flex h-full w-full flex-col border-l border-border bg-background p-0",
+					maxWidthClass,
+				)}
 			>
 				<SheetHeader className="px-6 py-6 border-b border-border bg-card/80">
 					<div className="flex items-center justify-between">

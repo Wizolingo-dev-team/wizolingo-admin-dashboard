@@ -11,6 +11,8 @@ import {
 	TicketOrderActionCell,
 	SubscriberActionCell,
 	NewsletterTemplateActionCell,
+	BlogActionCell,
+	BookingActionCell,
 } from "../cells/ActionCells";
 import { cn } from "@/lib/utils";
 import type { OrderStatus } from "@/types/orderManagement";
@@ -717,4 +719,221 @@ export const newsletterTemplateColumnsSchema = (
 		),
 	},
 ];
+
+// --- 9. BLOGS ---
+export const blogColumnsSchema = (
+	onView: (row: any) => void,
+	onEdit: (row: any) => void,
+	onDelete: (row: any) => void,
+) => [
+	{
+		key: "select",
+		header: SelectionHeader,
+		render: () => <Checkbox className="border-muted-foreground/40" />,
+	},
+	{
+		key: "post",
+		header: "Blog Article",
+		render: (row: any) => (
+			<div className="flex items-center gap-3">
+				<div className="size-12 rounded-xl bg-muted/40 border border-border overflow-hidden shrink-0">
+					{row.coverImage ? (
+						<img src={row.coverImage} className="size-full object-cover" alt="" />
+					) : (
+						<div className="size-full flex items-center justify-center text-primary/60 bg-primary/10">
+							<Icon icon="ph:newspaper-bold" className="size-5" />
+						</div>
+					)}
+				</div>
+				<div className="min-w-0 max-w-[260px]">
+					<div className="font-bold text-foreground text-sm line-clamp-1">{row.title}</div>
+					<div className="text-muted-foreground text-xs font-mono truncate">
+						/blogs/{row.slug}
+					</div>
+				</div>
+			</div>
+		),
+	},
+	{
+		key: "category",
+		header: "Category",
+		render: (row: any) => (
+			<Badge
+				variant="outline"
+				className="border-primary/30 text-primary bg-primary/10 text-[10px] font-bold uppercase tracking-wider"
+			>
+				{row.category || "General"}
+			</Badge>
+		),
+	},
+	{
+		key: "author",
+		header: "Author / Read Time",
+		render: (row: any) => (
+			<div className="flex flex-col">
+				<span className="font-semibold text-xs text-foreground">{row.author}</span>
+				<span className="text-[11px] text-muted-foreground">{row.readTime || "3 min read"}</span>
+			</div>
+		),
+	},
+	{
+		key: "status",
+		header: "Status",
+		render: (row: any) => {
+			const isPublished = row.status === "Published";
+			return (
+				<Badge
+					className={cn(
+						"px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border-none",
+						isPublished
+							? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+							: "bg-amber-500/15 text-amber-400 border border-amber-500/30",
+					)}
+				>
+					<span
+						className={cn(
+							"size-1.5 rounded-full mr-1.5 inline-block",
+							isPublished ? "bg-emerald-400" : "bg-amber-400",
+						)}
+					/>
+					{row.status}
+				</Badge>
+			);
+		},
+	},
+	{
+		key: "views",
+		header: "Views",
+		render: (row: any) => (
+			<div className="flex items-center gap-1 text-xs font-semibold text-foreground">
+				<Icon icon="ph:eye-bold" className="size-3.5 text-muted-foreground" />
+				<span>{row.views || 0}</span>
+			</div>
+		),
+	},
+	{
+		key: "date",
+		header: "Published Date",
+		render: (row: any) => (
+			<span className="text-xs text-muted-foreground font-medium">
+				{row.date ||
+					(row.createdAt ? new Date(row.createdAt).toLocaleDateString() : "—")}
+			</span>
+		),
+	},
+	{
+		key: "actions",
+		header: "Actions",
+		render: (row: any) => (
+			<BlogActionCell
+				onView={() => onView(row)}
+				onEdit={() => onEdit(row)}
+				onDelete={() => onDelete(row)}
+			/>
+		),
+	},
+];
+
+// --- 10. BOOKINGS ---
+export const bookingColumnsSchema = (
+	onView: (row: any) => void,
+	onDelete: (row: any) => void,
+	onUpdateStatus: (id: string, status: any) => void,
+) => [
+	{
+		key: "select",
+		header: SelectionHeader,
+		render: () => <Checkbox className="border-muted-foreground/40" />,
+	},
+	{
+		key: "client",
+		header: "Client Inquiry",
+		render: (row: any) => (
+			<div className="flex items-center gap-3">
+				<div className="size-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+					<span className="text-xs font-bold text-primary uppercase">
+						{row.fullName?.[0] || "B"}
+					</span>
+				</div>
+				<div>
+					<div className="font-bold text-foreground text-sm">{row.fullName}</div>
+					<div className="text-muted-foreground text-xs">{row.email}</div>
+				</div>
+			</div>
+		),
+	},
+	{
+		key: "eventType",
+		header: "Event Type / Date",
+		render: (row: any) => (
+			<div className="flex flex-col gap-0.5">
+				<Badge
+					variant="outline"
+					className="w-fit text-[10px] font-bold uppercase tracking-wider border-border"
+				>
+					{row.eventType || "Concert"}
+				</Badge>
+				<span className="text-xs text-muted-foreground">
+					{row.eventDate || "Flexible date"}
+				</span>
+			</div>
+		),
+	},
+	{
+		key: "locationBudget",
+		header: "Location & Budget",
+		render: (row: any) => (
+			<div className="flex flex-col text-xs">
+				<span className="font-semibold text-foreground">{row.country || "Not specified"}</span>
+				<span className="text-muted-foreground">{row.budget ? `${row.budget}` : "—"}</span>
+			</div>
+		),
+	},
+	{
+		key: "status",
+		header: "Status",
+		render: (row: any) => {
+			const st = (row.status || "pending").toLowerCase();
+			let colorClass = "bg-amber-500/15 text-amber-400 border border-amber-500/30";
+			if (st === "confirmed") colorClass = "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30";
+			if (st === "reviewed") colorClass = "bg-blue-500/15 text-blue-400 border border-blue-500/30";
+			if (st === "contacted") colorClass = "bg-purple-500/15 text-purple-400 border border-purple-500/30";
+			if (st === "rejected") colorClass = "bg-rose-500/15 text-rose-400 border border-rose-500/30";
+			if (st === "completed") colorClass = "bg-zinc-500/15 text-zinc-400 border border-zinc-500/30";
+
+			return (
+				<Badge
+					className={cn(
+						"px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider",
+						colorClass,
+					)}
+				>
+					{row.status}
+				</Badge>
+			);
+		},
+	},
+	{
+		key: "created",
+		header: "Received",
+		render: (row: any) => (
+			<span className="text-xs text-muted-foreground">
+				{row.createdAt ? new Date(row.createdAt).toLocaleDateString() : "—"}
+			</span>
+		),
+	},
+	{
+		key: "actions",
+		header: "Actions",
+		render: (row: any) => (
+			<BookingActionCell
+				onView={() => onView(row)}
+				onDelete={() => onDelete(row)}
+				onUpdateStatus={(newStatus) => onUpdateStatus(row._id, newStatus)}
+				currentStatus={row.status}
+			/>
+		),
+	},
+];
+
 

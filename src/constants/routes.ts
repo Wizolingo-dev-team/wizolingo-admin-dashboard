@@ -6,6 +6,8 @@ export const ROUTES = {
 	CATEGORY: "/category-management",
 	DISCOUNT: "/discount-management",
 	EVENTS: "/events-management",
+	BLOGS: "/blogs-management",
+	BOOKINGS: "/bookings-management",
 	NEWSLETTER: "/newsletter-management",
 	NOTIFICATIONS: "/notifications-management",
 	REVIEWS: "/reviews-management",

@@ -26,6 +26,7 @@ interface ActionModalProps {
 	onSubmit?: () => void;
 	formId?: string;
 	onDelete?: () => void;
+	maxWidthClass?: string;
 }
 
 export default function ActionModal({
@@ -39,12 +40,16 @@ export default function ActionModal({
 	onSubmit,
 	formId,
 	onDelete,
+	maxWidthClass = "sm:max-w-xl",
 }: ActionModalProps) {
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent
 				side="right"
-				className="flex h-full w-full flex-col border-l border-border bg-background p-0 sm:max-w-xl"
+				className={cn(
+					"flex h-full w-full flex-col border-l border-border bg-background p-0",
+					maxWidthClass,
+				)}
 			>
 				<SheetHeader className="px-6 py-6 border-b border-border bg-card/80 backdrop-blur-sm">
 					<div className="flex items-center gap-3">

@@ -274,4 +274,67 @@ export const ProductActionCell = (props: StandardActionProps) => <BaseActionCell
 export const DiscountActionCell = (props: StandardActionProps) => <BaseActionCell {...props} />;
 export const EventActionCell = (props: StandardActionProps) => <BaseActionCell {...props} />;
 export const SubscriberActionCell = (props: StandardActionProps) => <BaseActionCell {...props} />;
+export const BlogActionCell = (props: StandardActionProps) => <BaseActionCell {...props} />;
+
+export const BookingActionCell = ({
+	onView,
+	onDelete,
+	onUpdateStatus,
+	currentStatus,
+}: {
+	onView: () => void;
+	onDelete: () => void;
+	onUpdateStatus: (status: any) => void;
+	currentStatus: string;
+}) => (
+	<div className="flex items-center gap-1.5">
+		<Button
+			variant="ghost"
+			size="icon"
+			title="View Details"
+			onClick={onView}
+			className="size-8 text-muted-foreground hover:bg-muted hover:text-foreground"
+		>
+			<Icon icon="ph:eye-bold" className="size-5" />
+		</Button>
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button
+					variant="ghost"
+					size="icon"
+					title="Update Status"
+					className="size-8 text-muted-foreground hover:bg-primary/15 hover:text-primary"
+				>
+					<Icon icon="ph:clock-clockwise-bold" className="size-5" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end" className="w-44 rounded-xl border-border bg-card shadow-xl">
+				<DropdownMenuLabel className="text-xs text-muted-foreground font-semibold">Change Status</DropdownMenuLabel>
+				<DropdownMenuSeparator className="bg-border" />
+				{(["pending", "reviewed", "contacted", "confirmed", "rejected", "completed"] as const).map(
+					(st) => (
+						<DropdownMenuItem
+							key={st}
+							onClick={() => onUpdateStatus(st)}
+							className="cursor-pointer capitalize text-xs flex items-center justify-between"
+						>
+							<span>{st}</span>
+							{currentStatus === st && <Icon icon="ph:check-bold" className="size-3.5 text-primary" />}
+						</DropdownMenuItem>
+					),
+				)}
+			</DropdownMenuContent>
+		</DropdownMenu>
+		<Button
+			variant="ghost"
+			size="icon"
+			title="Delete Booking"
+			onClick={onDelete}
+			className="size-8 text-muted-foreground hover:bg-destructive/15 hover:text-destructive"
+		>
+			<Icon icon="ph:trash-bold" className="size-5" />
+		</Button>
+	</div>
+);
+
 

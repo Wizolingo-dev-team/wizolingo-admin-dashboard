@@ -27,6 +27,16 @@ export const MENU_ITEMS = [
 		href: ROUTES.EVENTS,
 	},
 	{
+		label: "Bookings",
+		icon: "lucide:calendar-check",
+		href: ROUTES.BOOKINGS,
+	},
+	{
+		label: "Blogs",
+		icon: "lucide:newspaper",
+		href: ROUTES.BLOGS,
+	},
+	{
 		label: "Newsletter",
 		icon: "lucide:mail-check",
 		href: ROUTES.NEWSLETTER,
