@@ -16,6 +16,8 @@ export const createBlogSchema = yup.object({
 	readTime: yup.string().trim().optional().default("3 min read"),
 	status: yup.string().oneOf(["Draft", "Published"]).default("Published"),
 	tags: yup.string().optional().default(""),
+	date: yup.string().trim().optional().default(""),
+	isoDate: yup.string().trim().optional().default(""),
 	coverImage: yup.mixed().optional(),
 	coverImageUrl: yup.string().trim().optional().default(""),
 });

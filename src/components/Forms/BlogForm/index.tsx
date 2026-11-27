@@ -14,6 +14,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
+import { format, parseISO, isValid } from "date-fns";
 import { useUploadBlogInlineImage, useGetBlogCategories } from "@/hooks/blogManagement";
 import type { BlogItem, BlogStatus } from "@/types/blogManagement";
 import { cn } from "@/lib/utils";
@@ -63,6 +65,21 @@ export default function BlogForm({
 	const [isCustomCategory, setIsCustomCategory] = useState(false);
 	const [author, setAuthor] = useState(initialData?.author || "Wiz Ofuasia Editorial");
 	const [status, setStatus] = useState<BlogStatus>(initialData?.status || "Published");
+	const [publishedDate, setPublishedDate] = useState<string>(() => {
+		if (initialData?.isoDate) {
+			const parsed = parseISO(initialData.isoDate);
+			if (isValid(parsed)) return format(parsed, "yyyy-MM-dd");
+		}
+		if (initialData?.date) {
+			const parsed = new Date(initialData.date);
+			if (!Number.isNaN(parsed.getTime())) return format(parsed, "yyyy-MM-dd");
+		}
+		if (initialData?.createdAt) {
+			const parsed = parseISO(initialData.createdAt);
+			if (isValid(parsed)) return format(parsed, "yyyy-MM-dd");
+		}
+		return format(new Date(), "yyyy-MM-dd");
+	});
 	const [tagsString, setTagsString] = useState((initialData?.tags || []).join(", "));
 	const [coverImagePreview, setCoverImagePreview] = useState(initialData?.coverImage || "");
 	const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
@@ -244,6 +261,21 @@ export default function BlogForm({
 		formData.append("author", author.trim() || "Wiz Ofuasia Editorial");
 		formData.append("status", status);
 		formData.append("readTime", readTime);
+
+		if (publishedDate) {
+			formData.append("isoDate", publishedDate);
+			const parsedDate = parseISO(publishedDate);
+			if (isValid(parsedDate)) {
+				formData.append(
+					"date",
+					parsedDate.toLocaleDateString("en-US", {
+						month: "long",
+						day: "numeric",
+						year: "numeric",
+					}),
+				);
+			}
+		}
 
 		// Parse tags
 		const tagsArray = tagsString
@@ -672,6 +704,22 @@ export default function BlogForm({
 						className="h-10 bg-card border-border text-sm"
 					/>
 				</div>
+
+				{/* Publish Date (supports backdating) */}
+				<div className="flex flex-col gap-1.5 sm:col-span-2">
+					<Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+						<span>Publish Date</span>
+						<span className="text-[10px] lowercase font-normal text-muted-foreground">
+							Pick any past or current date (backdating supported)
+						</span>
+					</Label>
+					<DatePicker
+						value={publishedDate}
+						onChange={setPublishedDate}
+						placeholder="Select publish date"
+						className="h-10 bg-card border-border text-sm"
+					/>
+				</div>
 			</div>
 
 			{/* 4. Excerpt / Short Summary */}
@@ -952,6 +1000,14 @@ export default function BlogForm({
 									<span className="text-xs text-muted-foreground">{readTime}</span>
 									<span className="text-xs text-muted-foreground">•</span>
 									<span className="text-xs text-muted-foreground">By {author}</span>
+									{publishedDate && isValid(parseISO(publishedDate)) && (
+										<>
+											<span className="text-xs text-muted-foreground">•</span>
+											<span className="text-xs text-muted-foreground">
+												{format(parseISO(publishedDate), "MMMM d, yyyy")}
+											</span>
+										</>
+									)}
 								</div>
 								<h1 className="font-display text-2xl sm:text-3xl font-extrabold text-foreground leading-tight">
 									{title || "Untitled Blog Post"}
